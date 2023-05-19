@@ -26,6 +26,7 @@ def load_all_documents(source_dir: str) -> list[Document]:
     all_files.extend(glob.glob(os.path.join(source_dir, f'**/*{ext}'),recursive=True))
   return [load_sigle_document(file_path) for file_path in all_files]
 
+# Main function
 def main():
   persist_dir = os.getenv('PERSIST_DIR')
   source_dir = os.getenv('SOURCE_DIR')

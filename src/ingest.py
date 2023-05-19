@@ -2,12 +2,20 @@ import os
 import glob
 from dotenv import load_dotenv
 from langchain.docstore.document import Document
-from langchain.document_loaders import PDFMinerLoader, CSVLoader
+from langchain.document_loaders import PDFMinerLoader, CSVLoader, TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.vectorstores import Chroma
+from constants import CHROMA_SETTINGS
 
-loader_mappings = {".pdf": (PDFMinerLoader, {}), ".csv": (CSVLoader, {})}
+loader_mappings = {
+    ".pdf": (PDFMinerLoader, {}),
+    ".csv": (CSVLoader, {}),
+    ".txt": (TextLoader, {}),
+}
 
 load_dotenv()
+
 
 # load a single document from file_path
 def load_sigle_document(file_path: str) -> Document:
@@ -44,7 +52,19 @@ def main():
     )
     texts = text_splitter.split_documents(documents)
     print(f"Split into {len(texts)} chunks of text. Max chunk size is {chunk_size}")
+    # create embeddings
+    embeddings = HuggingFaceEmbeddings(model_name=embeddings_model_name)
+    # create and store vectorstore
+    db = Chroma.from_documents(
+        texts,
+        embeddings,
+        persist_directory=persist_dir,
+        client_settings=CHROMA_SETTINGS,
+    )
+    db.persist()
+    db = None
     pass
+
 
 if __name__ == "__main__":
     main()

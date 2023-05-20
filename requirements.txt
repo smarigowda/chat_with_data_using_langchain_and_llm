@@ -2,3 +2,4 @@ langchain==0.0.174
 pdfminer.six==20221105
 python-dotenv==1.0.0
 chromadb==0.3.23
+gpt4all==0.2.3

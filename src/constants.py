@@ -4,10 +4,10 @@ from chromadb.config import Settings
 
 load_dotenv()
 
-PERSISTENT_DIR = os.environ.get("PERSIST_DIR")
+PERSIST_DIR = os.environ.get("PERSIST_DIR")
 
 CHROMA_SETTINGS = Settings(
     chroma_db_impl="duckdb+parquet",
-    persist_directory=PERSISTENT_DIR,
+    persist_directory=PERSIST_DIR,
     anonymized_telemetry=False,
 )
